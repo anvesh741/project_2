@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Current Weather - London</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+    
+     header nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1030;
+
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+   color: #333;
+}
+
+.content-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: calc(100vh - 56px); /* navbar height */
+   padding: 20px;
+} 
+ 
+
+        .weather-app {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            width: 100vw;
+            height: 100vh;
+            padding: 20px;
+            max-width: none;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .location {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .temp {
+            font-size: 4rem;
+            font-weight: 900;
+            margin: 10px 0;
+            color: #ff6b6b;
+        }
+        .condition {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: capitalize;
+        }
+        .icon {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+      
+        .detail-item {
+            background: #f0f4f8;
+            border-radius: 10px;
+            padding: 15px 20px;
+            flex: 1 1 45%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .detail-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        .detail-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #222;
+        }
+        #loading {
+            font-size: 1.2rem;
+            color: #555;
+            margin-top: 20px;
+        }
+        #error {
+            font-size: 1.2rem;
+            color: #ff4c4c;
+            margin-top: 20px;
+            display: none;
+        }
+        @media (max-width: 480px) {
+            .detail-item {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+   
+</head>
+<body> 
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: pink;" >
+            <div class="container-fluid">
+              <span class="navbar-brand mb -0 h1" href="#"><h2>AMBAR🦚</h2></span>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active mx-2" aria-current="page" href="#"><h4>Home</h4></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link mx-2" href="#"><h4>Dashboard</h4></a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle mx-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><h4> Popular cities</h4> </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#">Delhi</a></li>
+                      <li><a class="dropdown-item" href="#">Mumbai</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="#">Common temperature</a></li>
+                    </ul>
+                  </li>
+               
+                </ul>
+                <div class="d-flex">
+                  <button class="btn btn-outline-primary mx-2" type="button">Sign In</button>
+                  <button class="btn btn-outline-secondary mx-2" type="button">Log In</button>
+                </div>
+              </div>
+            </div>
+          </nav>
+    </header>
+    <div class="weather-app">
+        <div class="location" id="location"><h1>Enter a city and click Search</h1></div>
+        <input type="text" id="cityInput" placeholder="Enter city name" style="width: 80%; padding: 10px; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 20px;" />
+        <button id="searchBtn" style="padding: 10px 20px; font-size: 1rem; border-radius: 8px; border: none; background-color: #ff6b6b; color: white; cursor: pointer; margin-bottom: 20px;">Search</button><br>
+
+        <img src="cloud.jpg" alt="Weather Icon" class="icon" id="icon" />
+        <div class="temp" id="temp"></div>
+        <div class="condition" id="condition"></div>
+        <div class="details">
+            <div class="detail-item">
+                <div class="detail-title">Humidity</div>
+                <div class="detail-value" id="humidity"></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-title">Wind</div>
+                <div class="detail-value" id="wind"></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-title">Air Quality Index</div>
+                <div class="detail-value" id="aqi"></div>
+            </div>
+        </div>
+        <div id="loading" style="display:none;">Loading weather data...</div>
+        <div id="error"></div>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
